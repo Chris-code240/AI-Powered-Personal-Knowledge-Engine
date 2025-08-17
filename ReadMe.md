@@ -1,4 +1,4 @@
-# Let's DO Something Awesome!
+## Let's Do Something Awesome!
 
 # AI-Powered Personal Knowledge Engine — Architecture & Roadmap
 

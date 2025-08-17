@@ -1,0 +1,12 @@
+faiss
+sentence-transformers
+spacy
+sqlalchemy
+pydantic
+chromadb
+pymupdf
+celery
+redis
+python-dotenv
+numpy
+requests
