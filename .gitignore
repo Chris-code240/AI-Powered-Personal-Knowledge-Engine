@@ -1,2 +1,5 @@
-./venv
-./.env
+venv
+/.env
+*.mp4
+*.wav
+dummy_text.txt

@@ -10,3 +10,7 @@ redis
 python-dotenv
 numpy
 requests
+psycopg2
+alembic
+moviepy
+SpeechRecognition

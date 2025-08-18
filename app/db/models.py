@@ -1,8 +1,14 @@
 from sqlalchemy import (
-    Column, Integer, String, Text, ForeignKey, LargeBinary, DateTime
+    Column, Integer, String, Text, ForeignKey, LargeBinary, DateTime, create_engine
 )
+import os
 from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy.ext.asyncio import create_async_engine
 import datetime
+import dotenv
+
+dotenv.load_dotenv()
+engine = create_engine(os.getenv("DB_URI"))
 
 Base = declarative_base()
 
@@ -12,12 +18,15 @@ class Data(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     type = Column(String(50), nullable=False)   # pdf, audio, video, etc.
     data_path = Column(String(500), nullable=True)  # path or URL
-    file_content = Column(LargeBinary, nullable=True)  # optional: actual file
+    # file_content = Column(LargeBinary, nullable=True)  # optional: actual file
     value = Column(Text, nullable=True)  # extracted raw text
     created_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc))
 
     chunks = relationship("Chunk", back_populates="data", cascade="all, delete-orphan")
     tags = relationship("Tag", back_populates="data", cascade="all, delete-orphan")
+
+    def get(self):
+        return {"id":self.id, "type":self.type, "data_path":self.data_path, "chunks":self.chunks, "tags":self.tags, "created_at":self.created_at}
 
 
 class Chunk(Base):
@@ -29,6 +38,10 @@ class Chunk(Base):
 
     data = relationship("Data", back_populates="chunks")
 
+    def get(self):
+        return {"id":self.id,"text":self.text, "data_id":self.data_id}
+
+
 
 class Tag(Base):
     __tablename__ = "tag"
@@ -39,3 +52,6 @@ class Tag(Base):
     label = Column(String(100), nullable=False)  # entity type (PERSON, ORG, etc.)
 
     data = relationship("Data", back_populates="tags")
+
+    def get(self):
+        return {"id":self.id,"name":self.name,"label":self.label ,"data_id":self.data_id}
