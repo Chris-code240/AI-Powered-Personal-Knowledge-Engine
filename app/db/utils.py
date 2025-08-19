@@ -7,10 +7,9 @@ import numpy as np
 import os
 import dotenv
 import requests
-from nlp.main import nlp
-
+from ..nlp.main import nlp
+from pydantic import BaseModel
 dotenv.load_dotenv()
-
 def get_embeddings(chunks:list):
     if not chunks:
         raise ValueError("Chunks cannot be empty")
@@ -25,7 +24,6 @@ def get_embeddings(chunks:list):
     response = requests.post(url=os.getenv("JINA_EMBEDDING_URL"), json=data, headers=headers)
     resdata = response.json()['data']
     return [emb['embedding'] for emb in resdata]
-
 
 
 def clean_text(text: str) -> str:
@@ -87,3 +85,20 @@ def pdf_to_text(file_path:str)->str:
     return text
 
 
+
+
+def pydantic_to_orm_model(pydantic_model: BaseModel, target_orm_class: type):
+    """
+    Converts a Pydantic model instance to a SQLAlchemy ORM model instance.
+    
+    Args:
+        pydantic_model: The Pydantic model instance to convert.
+        target_orm_class: The target SQLAlchemy ORM class.
+
+    Returns:
+        The newly created SQLAlchemy ORM model instance.
+    """
+    data = pydantic_model.model_dump()
+    data.pop('id', None)  # Use .pop() with a default to avoid a KeyError if 'id' isn't there
+    orm_instance = target_orm_class(**data) 
+    return orm_instance

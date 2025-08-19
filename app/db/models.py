@@ -1,9 +1,8 @@
 from sqlalchemy import (
-    Column, Integer, String, Text, ForeignKey, LargeBinary, DateTime, create_engine
+    Column, Integer, String, Text, ForeignKey, DateTime, create_engine, JSON, Boolean
 )
 import os
 from sqlalchemy.orm import relationship, declarative_base
-from sqlalchemy.ext.asyncio import create_async_engine
 import datetime
 import dotenv
 
@@ -18,10 +17,10 @@ class Data(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     type = Column(String(50), nullable=False)   # pdf, audio, video, etc.
     data_path = Column(String(500), nullable=True)  # path or URL
-    # file_content = Column(LargeBinary, nullable=True)  # optional: actual file
     value = Column(Text, nullable=True)  # extracted raw text
     created_at = Column(DateTime, default=datetime.datetime.now(datetime.timezone.utc))
-
+    metadata_ = Column(JSON, default = {})
+    has_been_indexed = Column(Boolean, default = False)
     chunks = relationship("Chunk", back_populates="data", cascade="all, delete-orphan")
     tags = relationship("Tag", back_populates="data", cascade="all, delete-orphan")
 

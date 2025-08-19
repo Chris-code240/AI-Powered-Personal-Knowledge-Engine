@@ -49,5 +49,4 @@ def transcribe_video(file_path:str):
         return text
     raise Exception("Unknown Error Occured. Check your file path")
 
-print(transcribe_video("billy flowers 🤓.publer.com.mp4"))
 

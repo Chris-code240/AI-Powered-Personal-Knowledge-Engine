@@ -2,6 +2,12 @@ import psycopg2
 from contextlib import contextmanager
 import dotenv
 import os
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.exc import SQLAlchemyError
+
+DATABASE_URL = os.getenv("DB_URI")
+
 dotenv.load_dotenv()
 
 @contextmanager
@@ -29,3 +35,20 @@ def connection(dbname = os.getenv("DB_NAME"),
         if conn:
             cursor.close()
             conn.close()
+
+
+engine = create_engine(os.getenv("DB_URI"))
+SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
+
+@contextmanager
+def session_connection():
+    session = SessionLocal()
+    try:
+        yield session
+        session.commit()
+    except SQLAlchemyError as e:
+        session.rollback()
+        raise
+    finally:
+        session.close()
+

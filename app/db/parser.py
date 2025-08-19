@@ -1,6 +1,5 @@
 from pydantic import BaseModel, field_validator, model_validator
 from typing import Any, Optional
-from db.utils import pdf_to_text
 import uuid
 import datetime
 import mimetypes
@@ -40,16 +39,16 @@ class Chunk(BaseModel):
     vector:str
 
 class Data(BaseModel):
-    id:uuid.UUID = uuid.uuid4
-    title:str
-    type:str
-    data_path:str
-    raw_value:Any
-    value:Optional[Any]
-    tags:list[Tag] = []
-    chunks:list[str] = []
-    has_been_indexed:bool = False
-    created_at:datetime.datetime = datetime.datetime.now()
+    metadata_:dict = {"title":""}
+    type: str
+    data_path: str
+    value: Optional[Any] = None # Added a default value
+    tags: list[Tag] = []
+    chunks: list[str] = []
+    has_been_indexed: bool = False
+
+# Now, this instance will be valid
+
 
     
     @field_validator("type")
@@ -63,12 +62,6 @@ class Data(BaseModel):
             return value
         raise ValueError(f"Data path '{value}' invalid")
     
-    @model_validator(mode="after")
-    # let a worker do these (create chunks, extraction, get embeddings). Why? to transcribe
-    # a video for example is gonna take much time and we dont have
-    # to hog the system per a request
-    def validate_model(self):
-        pass
 
 
 
