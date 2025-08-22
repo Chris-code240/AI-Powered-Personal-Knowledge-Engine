@@ -5,3 +5,4 @@ venv
 dummy_text.txt
 **/*.gguf
 **/*.pdf
+test.py
