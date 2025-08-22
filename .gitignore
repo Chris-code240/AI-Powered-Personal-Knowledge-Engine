@@ -1,5 +1,7 @@
 venv
-/.env
+*.env
 *.mp4
 *.wav
 dummy_text.txt
+**/*.gguf
+**/*.pdf

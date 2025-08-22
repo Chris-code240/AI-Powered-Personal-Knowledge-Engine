@@ -1,15 +1,15 @@
 from celery import shared_task
-from db.parser import Tag, Data, get_media_type, is_url
-from nlp.main import get_ner_tags
-from db.utils import text_to_chunks, clean_text, pdf_to_text
-from ingest.utils import audio_to_text, transcribe_video
-from db.vector_store import add_chunks  
-from db.connection import session_connection
-from db.models import Data as Data_in_DB, Tag as Tag_in_DB, Chunk as Chunk_in_DB
-from ingest.web_scrapper import scrape_url
+from ..db.parser import Tag, Data, get_media_type, is_url
+from ..nlp.main import get_ner_tags
+from ..db.utils import text_to_chunks, clean_text, pdf_to_text
+from ..ingest.utils import audio_to_text, transcribe_video
+from ..db.vector_store import add_chunks  
+from ..db.connection import session_connection
+from ..db.models import Data as Data_in_DB, Tag as Tag_in_DB, Chunk as Chunk_in_DB
+from ..ingest.web_scrapper import scrape_url
+from .celery import app
 
-
-@shared_task
+@app.task
 def process_bookmark(data_id: int, url: str):
     """Scrape bookmark content, clean, chunk, tag, and store in DB + vector store."""
     text, metadata = scrape_url(url)
@@ -43,7 +43,7 @@ def process_bookmark(data_id: int, url: str):
     }
 
 
-@shared_task
+@app.task
 def add_data_task(data_dict):
     """General ingestion task: extract, clean, chunk, tag, embed, and persist data."""
     data = Data(**data_dict)
@@ -103,19 +103,25 @@ def add_data_task(data_dict):
 
     chunk_objs = [Chunk_in_DB(data_id=data_orm.id, text=chunk) for chunk in chunks]
     tag_objs = [Tag_in_DB(data_id=data_orm.id, name=t.name, label=t.label) for t in data.tags]
-
+    data_id_value = None
     with session_connection() as session:
         session.add(data_orm)
         session.flush()  # ensure `data_orm.id` is available
+        data_id_value = data_orm.id
         for obj in chunk_objs + tag_objs:
-            obj.data_id = data_orm.id
+            obj.data_id = data_id_value
         session.add_all(chunk_objs + tag_objs)
 
     # ---- Step 5: Push to vector store ----
-    add_chunks(data_id=data_orm.id, chunks=chunks)
+        add_chunks(data_id=data_id_value, chunks=chunks)
 
     return {
-        "data_id": str(data_orm.id),
+        "data_id": str(data_id_value),
         "chunks_added": len(chunks),
         "tags": [t.name for t in data.tags],
     }
+
+
+
+# print(type(data.model_dump()))
+

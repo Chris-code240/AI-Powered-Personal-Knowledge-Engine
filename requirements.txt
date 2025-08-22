@@ -16,3 +16,9 @@ moviepy
 SpeechRecognition
 beautifulsoup4
 playwright
+llama-cpp-python
+langchain
+accelerate
+transformers
+flask
+eventlet
