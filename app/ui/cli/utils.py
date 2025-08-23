@@ -1,7 +1,6 @@
 import requests
 import dotenv
 import os
-
 dotenv.load_dotenv()
 api_url = os.getenv("API_HOST")
 

@@ -6,13 +6,12 @@ async def scrape_url_async(url: str):
     async with async_playwright() as p:
         browser = await p.firefox.launch(headless=True)  # or chromium/webkit
         page = await browser.new_page()
-        await page.goto(url, wait_until="networkidle")
+        await page.goto(url, wait_until="networkidle", timeout=3600000)
 
         # get rendered HTML
         content = await page.content()
         await browser.close()
 
-    # parse with BeautifulSoup
     soup = BeautifulSoup(content, "html.parser")
 
     # extract text content (simplified)

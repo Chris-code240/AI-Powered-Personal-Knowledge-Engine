@@ -1,8 +1,7 @@
-from app.db.parser import Data
-from app.workers.main import add_data_task
+from app.db.parser import Data, is_url
+from app.workers.main import add_data_task, process_bookmark, scrape_url
 from app.db.connection import session_connection
+from app.rag.utils import rag_query
 
-data = Data(metadata_={"title":"Computer Graphicts"}, type="pdf", data_path="app/workers/Computer graphics - Wikipedia.pdf")
-
-add_data_task.delay(data.model_dump())
+print(rag_query("What is recursion?"))
 

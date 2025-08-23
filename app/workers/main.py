@@ -74,7 +74,7 @@ def add_data_task(data_dict):
             raise ValueError("Invalid URL for bookmark")
         text_, metadata = scrape_url(data.data_path)
         data.value = text_
-        data.metadata = metadata
+        data.metadata_ = metadata
 
     elif data.type == "code-repo":
         if not is_url(data.data_path):
