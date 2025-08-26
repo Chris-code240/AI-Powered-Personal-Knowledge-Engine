@@ -1,14 +1,14 @@
 
 from .main import retriever, llm
-
+import json
 def rag_query(query: str, top_k: int = 3):
     retrieved_docs = retriever.retrieve(query, top_k=top_k)
     context = "\n".join([doc['text'] for doc in retrieved_docs])
-
+    sources = [doc.get('data_path','') for doc in retrieved_docs]
     prompt = f"""
     You are a helpful assistant.
     Use the context below to answer the query. 
-    If the answer isn't in the context, say you don't know.
+    If the answer isn't in the context, say "I don't know."
 
     Context:
     {context}
@@ -19,6 +19,7 @@ def rag_query(query: str, top_k: int = 3):
     Answer:
     """
 
+
     # Step 3: Generate response
     output = llm(
         prompt,
@@ -27,4 +28,5 @@ def rag_query(query: str, top_k: int = 3):
         top_p=0.95
     )
 
-    return output["choices"][0]["text"].strip()
+    return {"text":output["choices"][0]["text"].strip(), "sources":sources}
+print(rag_query("What is recursion?"))

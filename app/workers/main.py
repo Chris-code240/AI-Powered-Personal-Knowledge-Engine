@@ -113,7 +113,7 @@ def add_data_task(data_dict):
         session.add_all(chunk_objs + tag_objs)
 
     # ---- Step 5: Push to vector store ----
-        add_chunks(data_id=data_id_value, chunks=chunks)
+        add_chunks(data_id=data_id_value,data_path=data_orm.data_path, chunks=chunks)
 
     return {
         "data_id": str(data_id_value),

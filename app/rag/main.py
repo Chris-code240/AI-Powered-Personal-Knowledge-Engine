@@ -1,9 +1,10 @@
 from llama_cpp import Llama
 from ..retriever.hybrid_retriever import HybridRetriever
 from .import config
+from ..retriever.vector_retriever import VectorRetriever
 
 
-retriever = HybridRetriever(collection_name=config.COLLECTION_NAME)
+retriever = VectorRetriever()
 
 llm = Llama(
     model_path=config.MODEL_PATH,

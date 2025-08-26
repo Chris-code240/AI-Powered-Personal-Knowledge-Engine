@@ -79,7 +79,6 @@ class Data(BaseModel):
     chunks: list[str] = []
     has_been_indexed: bool = False
 
-# Now, this instance will be valid
 
 
     
@@ -91,7 +90,6 @@ class Data(BaseModel):
     
     @model_validator(mode="after")
     def validate_model(self):
-        print(self.type, " <> ", self.type in DATA_TYPES)
         if self.type == "bookmark":
             if not is_url(self.data_path):
                 raise ValueError(f"Data path:url '{self.data_path}'")

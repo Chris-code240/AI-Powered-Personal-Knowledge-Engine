@@ -15,7 +15,7 @@ collection = client.get_or_create_collection(
     embedding_function=embedding_fn
 )
 
-def add_chunks(data_id: str, chunks: list[str])->bool:
+def add_chunks(data_id,data_path:str, chunks: list[str])->bool:
     """
     Store chunks with embeddings into Chroma
     """
@@ -23,7 +23,7 @@ def add_chunks(data_id: str, chunks: list[str])->bool:
         collection.add(
                 ids=[f"{data_id}_{i}" for i in range(len(chunks))],
                 documents=chunks,
-                metadatas=[{"data_id": data_id, "chunk_index": i} for i in range(len(chunks))]
+                metadatas=[{"data_id": data_id, "data_path":data_path, "chunk_index": i} for i in range(len(chunks))]
             )
         return True
     except Exception as e:

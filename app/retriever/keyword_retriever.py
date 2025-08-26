@@ -1,3 +1,8 @@
+###########################
+# I wwant to let only the  #
+# Vector Retriver to handle#
+#  the job
+###########################
 from typing import List, Dict
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
@@ -45,20 +50,30 @@ class KeywordRetriever:
             results = []
 
             for c in chunk_matches:
-                results.append({
-                    "id": c.id,
-                    "text": c.text,
-                    "data_id": c.data_id,
-                    "match_type": "chunk"
-                })
+                try:
+                    results.append({
+                        "id": c.id,
+                        "text": c.text,
+                        "data_id": c.data_id,
+                        "match_type": "chunk",
+                        "data_path":c.data.data_path
+                    })
+                except Exception:
+                    continue
 
             for t in tag_matches:
-                results.append({
-                    "id": t.id,
-                    "name": t.name,
-                    "label": t.label,
-                    "data_id": t.data_id,
-                    "match_type": "tag"
-                })
+                try:
+                    results.append({
+                        "id": t.id,
+                        "name": t.name,
+                        "label": t.label,
+                        "data_id": t.data_id,
+                        "match_type": "tag",
+                        "data_path":t.data.data_path
+                    })
+                except Exception as e:
+                    continue
 
             return results[:top_k]
+        
+

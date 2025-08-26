@@ -35,11 +35,11 @@ class HybridRetriever:
         with self.conn as session:
             # Step 1: match tags
             tag_matches = session.query(Tag).filter(Tag.name.ilike(f"%{query}%")).all()
-            tag_results = [{"source": "tag", "text": t.name, "score": tag_weight, **t.get()} for t in tag_matches]
+            tag_results = [{"source": t.data.data_path or "", "text": t.name, "score": tag_weight, **t.get()} for t in tag_matches]
 
             # Step 2: match keyword in chunks
             chunk_matches = session.query(Chunk).filter(Chunk.text.ilike(f"%{query}%")).all()
-            chunk_results = [{"source": "chunk", "text": c.text, "score": keyword_weight, **c.get()} for c in chunk_matches]
+            chunk_results = [{"source": c.data.data_path or "", "text": c.text, "score": keyword_weight, **c.get()} for c in chunk_matches]
 
             # Step 3: vector search
             vector_results = self.vector_retriever.retrieve(query, top_k=top_k)
