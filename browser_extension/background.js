@@ -10,11 +10,12 @@ browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     //   });
 
       if (true) {
+        console.log(message.payload)
         browser.notifications.create({
           type: "basic",
           iconUrl: browser.runtime.getURL("icons/success.png"),
           title: "Knowledge Engine",
-          message: `"${message.payload.metadata_.title}" saved successfully!`
+          message: `"${JSON.stringify(message.payload)}" saved successfully!`
         });
       } else {
         throw new Error(`Server responded with ${res.status}`);
