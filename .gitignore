@@ -6,3 +6,5 @@ dummy_text.txt
 **/*.gguf
 **/*.pdf
 test.py
+app/ui/frontend
+app/ui/frontend_app

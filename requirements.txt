@@ -22,3 +22,5 @@ accelerate
 transformers
 flask
 eventlet
+matplotlib
+pandas

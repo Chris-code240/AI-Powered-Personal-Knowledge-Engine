@@ -1,3 +1,29 @@
 @tailwind base;
 @tailwind utilities;
 @tailind components;
+
+/* Thin scrollbar for all elements */
+* {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #cbd5e1 transparent; /* Firefox: thumb + track */
+  scroll-behavior: smooth;
+}
+
+/* Chrome, Edge, Safari */
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1; /* Tailwind gray-300 */
+  border-radius: 9999px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-button {
+  display: none; /* Hide arrows */
+}
