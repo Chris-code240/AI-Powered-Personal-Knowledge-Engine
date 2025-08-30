@@ -3,7 +3,7 @@ import AsideLink from "./AsideLink";
 export default function Aside(){
 
     return (
-        <aside className="h-full w-[18%] space-y-6">
+        <aside className="h-full w-full space-y-6">
             <div className="logo w-full h-[3rem] rounded-md bg-[#42424260] text-white flex items-center space-x-3 px-3">
                 <img src="/icons/data.svg" className="w-7" /><span>Knowledge Engine</span>
                 
