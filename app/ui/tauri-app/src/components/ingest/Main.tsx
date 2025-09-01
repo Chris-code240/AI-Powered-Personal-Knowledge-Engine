@@ -1,8 +1,19 @@
 import React, { useState, useRef, useEffect, DragEvent, ClipboardEvent } from "react"
 
+type dataMetaData = {
+  title:string
+}
+
+type DataPayload = {
+  metadata_: dataMetaData
+  data_path: string
+}
+
 const IngestMain: React.FC = () => {
   const [dragActive, setDragActive] = useState(false)
   const [droppedItem, setDroppedItem] = useState<string | null>(null)
+  const [ dataPayload, setDataPayload ] = useState<DataPayload>()
+  
   const dropRef = useRef<HTMLDivElement | null>(null)
 
   // Handle Drag & Drop
@@ -26,6 +37,8 @@ const IngestMain: React.FC = () => {
     const file = e.dataTransfer.files[0]
     if (file) {
       setDroppedItem(file.name)
+      setDataPayload({"metadata_":{"title":file.name}, "data_path":""})
+      console.log(dataPayload)
     }
   }
 

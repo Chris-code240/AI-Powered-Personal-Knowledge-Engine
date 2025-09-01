@@ -1,5 +1,5 @@
 import AsideLink from "./AsideLink";
-
+import { Link } from "react-router-dom";
 export default function Aside(){
 
     return (
@@ -10,10 +10,16 @@ export default function Aside(){
             </div>
             <div className="rounded-md bg-[#42424260] w-full h-[80vh] p-3 flex flex-col justify-between">
                 
-                <div className="space-y-3">
-                    <AsideLink label="ChatBot" icon="chat.svg" onClick={()=>{}} />
-                    <AsideLink label="Ingest" icon="add.svg" onClick={()=>{}} />
-                    <AsideLink label="Report" icon="report.svg" onClick={()=>{}} />
+                <div className="space-y-6">
+                    <Link to={"chatbot"} >
+                        <AsideLink label="ChatBot" icon="chat.svg" onClick={()=>{}} />
+                    </Link>
+                    <Link to={"ingest"}>
+                        <AsideLink label="Ingest" icon="add.svg" onClick={()=>{}} />
+                    </Link>
+                    <Link to={"report"}>
+                        <AsideLink label="Report" icon="report.svg" onClick={()=>{}} />
+                    </Link>
                 </div>
 
                 <div className="cursor-pointer text-white w-full h-[3rem] rounded-md bg-[#111111] hover:bg-black flex items-center justify-between px-3">

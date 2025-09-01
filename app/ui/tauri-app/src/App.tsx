@@ -1,22 +1,20 @@
-import "./App.css";
+import { HashRouter, Routes, Route } from "react-router-dom";
+import ChatArea from "./components/chat/ChatArea";
 import IngestMain from "./components/ingest/Main";
-import Aside from "./components/Aside";
-function App() {
-  
+import ReportMain from "./components/report/ReportMain";
+import Layout from "./Layout";
+
+export default function App() {
   return (
-    <div className="container mx-auto h-screen w-screen pt-3 pb-3">
-
-        <div className="flex items-center w-full h-full justify-between">
-          <div className="w-[18%] h-full">
-            <Aside />
-          </div>
-          <div className="w-[80%] h-full">
-            <IngestMain />
-          </div>
-        </div>
-
-    </div>
-  )
+    <HashRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="chatbot" element={<ChatArea />} />
+          <Route index element={<ChatArea />} />
+          <Route path="ingest" element={<IngestMain />} />
+          <Route path="report" element={<ReportMain />} />
+        </Route>
+      </Routes>
+    </HashRouter>
+  );
 }
-
-export default App;
