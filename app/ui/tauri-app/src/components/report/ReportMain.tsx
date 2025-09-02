@@ -13,6 +13,23 @@ type ErrorsOverTime = { date: string; errors: number }
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A020F0"]
 
+type ReportResponse<T = any> = {
+  success: boolean;
+  data: T;
+};
+
+async function fetchReport<T = any>(): Promise<ReportResponse<T> | null> {
+  try {
+    const res = await fetch("http://localhost:5000/report");
+    if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+    return await res.json() as ReportResponse<T>;
+  } catch (err) {
+    console.error("Failed to fetch report:", err);
+    return null;
+  }
+}
+
+
 const ReportMain: React.FC = () => {
   const [ingestionOverTime, setIngestionOverTime] = useState<IngestionOverTime[]>([])
   const [topSources, setTopSources] = useState<TopSource[]>([])
@@ -24,42 +41,23 @@ const ReportMain: React.FC = () => {
   const [errorsOverTime, setErrorsOverTime] = useState<ErrorsOverTime[]>([])
 
   useEffect(() => {
-    // Simulated API fetch — replace with actual API call
-    setIngestionOverTime([
-      { date: "2025-08-01", count: 4 },
-      { date: "2025-08-02", count: 7 },
-      { date: "2025-08-03", count: 10 },
-    ])
-    setTopSources([
-      { source: "wikipedia.org", count: 12 },
-      { source: "docs.python.org", count: 8 },
-      { source: "medium.com", count: 6 },
-    ])
-    setChunkSizes([
-      { label: "Small", avgSize: 120 },
-      { label: "Medium", avgSize: 300 },
-      { label: "Large", avgSize: 800 },
-    ])
-    setEmbeddingCoverage([
-      { status: "Success", percentage: 85 },
-      { status: "Failed", percentage: 15 },
-    ])
-    setTagDistribution([
-      { tag: "AI", count: 20 },
-      { tag: "ML", count: 15 },
-      { tag: "Data Science", count: 10 },
-    ])
-    setUntaggedDocs(5)
-    setModelUsage([
-      { model: "OpenAI-ada-002", count: 70 },
-      { model: "BERT", count: 30 },
-    ])
-    setErrorsOverTime([
-      { date: "2025-08-01", errors: 1 },
-      { date: "2025-08-02", errors: 2 },
-      { date: "2025-08-03", errors: 0 },
-    ])
+    const fetchData = async () => {
+      const report = await fetchReport()
+      if (report?.success) {
+        const data = report.data
+        setIngestionOverTime(data.ingestionOverTime || [])
+        setTopSources(data.topSources || [])
+        setChunkSizes(data.chunkSizes || [])
+        setEmbeddingCoverage(data.embeddingCoverage || [])
+        setTagDistribution(data.tagDistribution || [])
+        setUntaggedDocs(data.untaggedDocs || 0)
+        setModelUsage(data.modelUsage || [{ model: 'Spacy', count: 1 }, { model: 'Phi-3-mini', count: 3 }])
+        setErrorsOverTime(data.errorsOverTime || [])
+      }
+    }
+    fetchData()
   }, [])
+
 
   return (
     <div className="grid grid-cols-2 gap-6 p-4 overflow-scroll w-full h-full">

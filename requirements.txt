@@ -24,3 +24,4 @@ flask
 eventlet
 matplotlib
 pandas
+flask-cors

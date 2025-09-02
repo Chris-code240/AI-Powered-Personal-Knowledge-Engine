@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react"
 type BubbleProp = {
   text: string
   type: string
-  sources: string[]
+  sources?: string[]
 }
 
 const ChatBubble: React.FC<BubbleProp> = ({ text, type, sources = [] }) => {
@@ -23,7 +23,7 @@ const ChatBubble: React.FC<BubbleProp> = ({ text, type, sources = [] }) => {
       } else {
         clearInterval(interval)
       }
-    }, 30) // adjust speed (ms per character)
+    }, 20) // adjust speed (ms per character)
 
     return () => clearInterval(interval)
   }, [text, type])
@@ -38,8 +38,8 @@ const ChatBubble: React.FC<BubbleProp> = ({ text, type, sources = [] }) => {
         <div
           className={`${
             type === "response"
-              ? "self-start"
-              : "self-end bg-[#e9eef6] p-2 rounded-md"
+              ? "self-start border-2 border-[#e9eef610] rounded-xl p-2"
+              : "self-end bg-[#e9eef6] p-2 rounded-xl"
           }`}
         >
           {displayedText}

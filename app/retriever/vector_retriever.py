@@ -49,7 +49,3 @@ class VectorRetriever:
                     "data_path":data.data_path if data is not None else ""
                 })
             return r
-
-q = VectorRetriever(collection_name="data_chunks")
-
-print(q.retrieve("What is recursion"))

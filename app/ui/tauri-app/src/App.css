@@ -4,19 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background: linear-gradient(45deg, black, black, #0e7490);
-  background-size: 400% 400%;
-  animation: gradient 100s ease infinite;
-}
-
-@keyframes gradient {
-  0% { background-position: 0% 0%; }
-  50% { background-position: 100% 100%; }
-  100% { background-position: 0% 0%; }
-}
-
-
 /* Theme Colors */
 :root {
   --sb-track: transparent;
@@ -60,5 +47,17 @@ body {
   width: 0;
   height: 0;
   display: none;
+}
+
+body {
+  background: linear-gradient(45deg, black, black, #0e7490);
+  background-size: 400% 400%;
+  animation: gradient 100s ease infinite;
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
 }
 

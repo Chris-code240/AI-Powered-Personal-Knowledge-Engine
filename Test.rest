@@ -2,3 +2,20 @@ POST http://127.0.0.1:5000/query HTTP/1.1
 Content-Type: application/json
 
 {"query":"What is recursion?"}
+
+###
+
+GET http://127.0.0.1:5000/report HTTP/1.1
+
+# function  get_report(){
+#   let data = {"ingestionOverTime":[], "embeddingCoverage":[], "tagDistribution":[], "topSources":[]}
+#   fetch("http://localhost:5000/report").then((res)=>res.json()).then((jres)=>{
+#     data = jres['data']
+#   }).catch((e)=>{
+#     console.log(e)
+#   })
+#   return data
+# }
+
+
+# {'ingestionOverTime': [{'date': '2025-08-22', 'count': 1}, {'date': '2025-08-23', 'count': 1}], 'tagDistribution': [{'tag': 'LOC', 'count': 6}, {'tag': 'FAC', 'count': 2}, {'tag': 'NORP', 'count': 8}, {'tag': 'PERSON', 'count': 109}, {'tag': 'GPE', 'count': 32}, {'tag': 'WORK_OF_ART', 'count': 6}, {'tag': 'MONEY', 'count': 1}, {'tag': 'EVENT', 'count': 1}, {'tag': 'ORDINAL', 'count': 39}, {'tag': 'PRODUCT', 'count': 9}, {'tag': 'DATE', 'count': 128}, {'tag': 'ORG', 'count': 238}, {'tag': 'LAW', 'count': 1}, {'tag': 'TIME', 'count': 19}, {'tag': 'CARDINAL', 'count': 92}, {'tag': 'QUANTITY', 'count': 2}], 'topSources': [{'source': 'local', 'count': 1}, {'source': 'www.geeksforgeeks.org', 'count': 1}], 'embeddingCoverage': [{'status': 'Failed', 'percentage': 100.0}]}
