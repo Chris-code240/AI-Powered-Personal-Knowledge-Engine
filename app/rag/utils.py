@@ -29,4 +29,3 @@ def rag_query(query: str, top_k: int = 3):
     )
 
     return {"text":output["choices"][0]["text"].strip(), "sources":sources}
-print(rag_query("What is recursion?"))

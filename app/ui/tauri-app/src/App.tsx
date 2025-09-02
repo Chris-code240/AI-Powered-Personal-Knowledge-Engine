@@ -1,15 +1,25 @@
 import "./App.css";
-import Aside from "./components/Aside";
-import Input from "./components/chat/Input";
+import ChatArea from "./components/chat/ChatArea";
+import IngestMain from "./components/ingest/Main";
+import ReportMain from "./components/report/ReportMain";
+import Settings from "./components/WorkSpace";
+import { HashRouter, Route, Routes } from "react-router-dom";
+import Layout from "./Layout";
 function App() {
   
   return (
-    <div className="container mx-auto h-screen w-screen mt-6">
-      <div className="flex items-end space-x-3">
-        <Aside />
-        <Input handleSubmit={()=>{}}/>
-      </div>
-    </div>
+      <HashRouter>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route path="chat" element={<ChatArea />}  />
+            <Route index element={<ChatArea />}  />
+            <Route path="chatbot" element={<ChatArea />}  />
+            <Route path="ingest" element={<IngestMain />}  />
+            <Route path="report" element={<ReportMain />}  />
+            <Route path="settings" element={<Settings />} />
+          </Route>
+        </Routes>
+      </HashRouter>
   )
 }
 
