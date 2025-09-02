@@ -2,7 +2,7 @@ import "./App.css";
 import ChatArea from "./components/chat/ChatArea";
 import IngestMain from "./components/ingest/Main";
 import ReportMain from "./components/report/ReportMain";
-import Settings from "./components/WorkSpace";
+import Settings from "./components/Settings";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import Layout from "./Layout";
 function App() {
