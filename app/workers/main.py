@@ -8,6 +8,7 @@ from ..db.connection import session_connection
 from ..db.models import Data as Data_in_DB, Tag as Tag_in_DB, Chunk as Chunk_in_DB
 from ..ingest.web_scrapper import scrape_url
 from .celery import app
+from ..db.parser import DATA_TYPES
 
 @app.task
 def process_bookmark(data_id: int, url: str):
@@ -80,7 +81,8 @@ def add_data_task(data_dict):
         if not is_url(data.data_path):
             raise ValueError("Invalid URL for repo")
         data.value = "<repo_code_and_docs>"  # TODO: implement repo extraction
-
+    elif data.type == "text":
+        data.data_path = "unknown"
     else:
         raise ValueError(f"Unsupported data type: {data.type}")
 
@@ -123,5 +125,4 @@ def add_data_task(data_dict):
 
 
 
-# print(type(data.model_dump()))
 

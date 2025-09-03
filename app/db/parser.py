@@ -58,7 +58,7 @@ def get_media_type(path):
             return "document"
     return "unknown"
 
-DATA_TYPES = ("audio","video", "image", "pdf", "bookmark", "code-repo")
+DATA_TYPES = ("audio","video", "image", "pdf", "bookmark", "code-repo", "text")
 
 
 class Tag(BaseModel):
@@ -93,6 +93,10 @@ class Data(BaseModel):
         if self.type == "bookmark":
             if not is_url(self.data_path):
                 raise ValueError(f"Data path:url '{self.data_path}'")
+        elif self.type == "text":
+            if len(self.value) < 1:
+                raise ValueError("Text must have a value")
+            self.data_path = "unknown"
         else:
             if not pathlib.Path(self.data_path).is_file():
                  raise ValueError(f"Data path '{self.data_path}' is invalid URL")
