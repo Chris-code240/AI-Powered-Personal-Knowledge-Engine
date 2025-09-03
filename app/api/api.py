@@ -6,6 +6,11 @@ from ..db.models import Data as Data_in_DB, Tag as Tag_in_DB, Chunk
 from ..db.connection import session_connection
 from sqlalchemy import func, case
 from flask_cors import CORS
+import os
+import json
+
+
+CONFIG_FILE = "app/config/settings.json"
 
 app = Flask(__name__)
 CORS(app)
@@ -107,7 +112,39 @@ def get_report():
 
     except Exception as e:
         return jsonify({"success":False, "details":str(e)}), 400
-    
+
+
+
+def load_settings():
+    if not os.path.exists(CONFIG_FILE):
+        return {}
+    with open(CONFIG_FILE, "r") as f:
+        return json.load(f)
+
+def save_settings(data):
+    with open(CONFIG_FILE, "w") as f:
+        json.dump(data, f, indent=4)
+
+@app.route('/settings', methods=['GET', 'POST', 'PATCH'])
+def settings():
+    try:
+        if request.method == "GET":
+            return jsonify(load_settings()), 200
+
+        elif request.method == "POST":
+            new_settings = request.json
+            save_settings(new_settings)
+            return jsonify({"message": "Settings saved successfully", "settings": new_settings}), 201
+
+        elif request.method == "PATCH":
+            current_settings = load_settings()
+            updates = request.json
+            current_settings.update(updates)
+            save_settings(current_settings)
+            return jsonify({"message": "Settings updated", "settings": current_settings}), 200
+    except Exception as e:
+        return jsonify({"message":str(e)}), 400
+
 
 if __name__ == "__main__":
     app.run(debug=True)

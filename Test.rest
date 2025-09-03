@@ -5,7 +5,34 @@ Content-Type: application/json
 
 ###
 
-GET http://127.0.0.1:5000/report HTTP/1.1
+GET  http://127.0.0.1:5000/settings HTTP/1.1
+Content-Type: application/json
+
+{
+    "database": {
+        "uri": "postgresql+psycopg2://postgres:password@localhost:5432/knowledge_engine_db",
+        "name": "knowledge_engine_db",
+        "user": "",
+        "password": "",
+        "host": "",
+        "port": null
+    },
+    "celery": {
+        "broker_url": "redis://localhost:6379/0",
+        "result_backend": "redis://localhost:6379/1",
+        "task_serializer": "json",
+        "result_expires": 3600,
+        "concurrency": 4,
+        "prefetch_multiplier": 1
+    },
+    "redis": {
+        "host": "localhost",
+        "port": 6379,
+        "db": 0,
+        "password": "",
+        "ssl": false
+    }
+}
 
 # function  get_report(){
 #   let data = {"ingestionOverTime":[], "embeddingCoverage":[], "tagDistribution":[], "topSources":[]}
