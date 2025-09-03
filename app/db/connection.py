@@ -6,9 +6,18 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
 
-DATABASE_URL = os.getenv("DB_URI")
 
 dotenv.load_dotenv()
+from ..config.config import load_settings
+
+settings = load_settings()
+
+db_uri = (
+    settings["database"]["uri"] or
+    f"postgresql://{settings['database']['user']}:{settings['database']['password']}@"
+    f"{settings['database']['host']}:{settings['database']['port']}/{settings['database']['name']}"
+)
+
 
 @contextmanager
 def connection(dbname = os.getenv("DB_NAME"), 
@@ -37,7 +46,7 @@ def connection(dbname = os.getenv("DB_NAME"),
             conn.close()
 
 
-engine = create_engine(os.getenv("DB_URI"))
+engine = create_engine(db_uri)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 @contextmanager

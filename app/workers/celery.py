@@ -1,15 +1,21 @@
 from celery import Celery
-# from app import APP_NAME
+from ..config.config import load_settings
 
-app = Celery("app",
-             broker='redis://localhost:6379/0',
-             backend='redis://localhost:6379/1')
+settings = load_settings()
 
-# Optional settings
-app.conf.update(
-    task_serializer='json',
-    result_serializer='json',
-    timezone='UTC',
-    enable_utc=True,
+app = Celery(
+    'app',
+    broker=settings["celery"]["broker_url"],
+    backend=settings["celery"]["result_backend"]
 )
+
+app.conf.update(
+    task_serializer=settings["celery"]["task_serializer"],
+    result_expires=settings["celery"]["result_expires"],
+    worker_concurrency=settings["celery"]["concurrency"],
+    worker_prefetch_multiplier=settings["celery"]["prefetch_multiplier"],
+    timezone='UTC',
+    enable_utc=True
+)
+
 app.autodiscover_tasks(['app.workers.main'])
