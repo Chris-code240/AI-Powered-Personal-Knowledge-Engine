@@ -7,6 +7,7 @@ type dataMetaData = {
 type DataPayload = {
   metadata_: dataMetaData
   data_path: string
+  value?:string
 }
 
 const IngestMain: React.FC = () => {
@@ -31,6 +32,7 @@ const IngestMain: React.FC = () => {
     const textData = e.dataTransfer.getData("text")
     if (textData) {
       setDroppedItem(textData)
+      setDataPayload({metadata_:{title:''}, data_path:'', value:textData})
       return
     }
 
