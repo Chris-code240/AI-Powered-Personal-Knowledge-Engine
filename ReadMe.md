@@ -29,7 +29,7 @@ A local-first, privacy-preserving system that ingests your personal knowledge (d
 +----------------------+       +--------------------+            +------------------------+
 | Query Interfaces     | --->  | Retrieval Engine   |  <------> | Orchestrator/Indexer   |
 | - CLI                |       | - Hybrid (BM25+VEC)|            | - Scheduler/Workers    |
-| - Web UI (FastAPI)   |       | - RAG w/ reranking |            | - Pipelines/Retry DLQ  |
+| - Web UI (Flask)   |       | - RAG w/ reranking |            | - Pipelines/Retry DLQ  |
 | - Chat Bot (tg/discord)|     | - QA/Summarization |            | - Versioning           |
 +----------------------+       +--------------------+            +------------------------+
 ```
@@ -40,7 +40,7 @@ A local-first, privacy-preserving system that ingests your personal knowledge (d
 
 ## 2) Tech Stack (swappable)
 
-* **Core**: Python 3.11+, FastAPI, Pydantic, Typer (CLI)
+* **Core**: Python 3.11+, Flask, Pydantic, Typer (CLI)
 * **NLP/IR**: sentence-transformers, HuggingFace Transformers, spaCy, rapidfuzz, rank\_bm25
 * **ASR**: Whisper (small/medium, local)
 * **Storage**:
@@ -49,7 +49,7 @@ A local-first, privacy-preserving system that ingests your personal knowledge (d
   * Relational: SQLite → Postgres (optional)
   * Blob: local filesystem → S3-compatible (optional)
 * **Workers**: Celery/Arq + Redis, or asyncio queues
-* **UI**: FastAPI + HTMX/Tailwind (or React), WebSocket streaming
+* **UI**: Flask + HTMX/Tailwind (or React), WebSocket streaming
 * **Observability**: Rich + Loguru; Prometheus (metrics); SQLite event log
 * **Packaging**: Poetry/uv; Docker (optional)
 
@@ -124,7 +124,7 @@ User query → query parser → (a) lexical (BM25) + (b) semantic (FAISS)
 
 ---
 
-## 6) API Surface (FastAPI)
+## 6) API Surface (Flask)
 
 * `POST /ingest` {path|url, tags} → enqueue
 * `GET /documents/{id}` → metadata + outline
@@ -152,7 +152,7 @@ pke ask "What did I learn about Rust lifetimes?"
 
 **M0 – Skeleton (1–2 weeks)**
 
-* FastAPI, Typer CLI, SQLite, FAISS
+* Flask, Typer CLI, SQLite, FAISS
 * Ingest PDFs + Markdown
 * Chunk → embed → search (BM25 + FAISS)
 
@@ -186,7 +186,7 @@ pke ask "What did I learn about Rust lifetimes?"
 ```
 repo/
   app/
-    api/           # FastAPI routers
+    api/           # Flask routers
     core/          # settings, logging, DI
     db/            # SQL models, migrations
     ingest/        # watchers, extractors, normalizers
@@ -309,7 +309,7 @@ def mmr(query_vec, cand_vecs, λ=0.7, top_k=8):
 
 ## 17) Day-1 Build Plan (practical)
 
-1. Scaffold repo (FastAPI + Typer + SQLite + FAISS)
+1. Scaffold repo (Flask + Typer + SQLite + FAISS)
 2. Implement `ingest file` → extract text → chunk → embed → store
 3. Implement `/search` hybrid + CLI search
 4. Add `/ask` with streaming answers & citations
