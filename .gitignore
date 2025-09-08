@@ -9,3 +9,7 @@ test.py
 app/ui/frontend
 app/ui/frontend_app
 dummy_text.txt
+**/__pycache__/*
+app/**/*__pycache__
+dist/*
+build
